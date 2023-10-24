@@ -150,6 +150,83 @@
       // Fade in paragraph after a short delay
       showAfter(delay, paragraphElement);
       delay += 200.0;
+      // Check for MINT tag
+      var mintTag = tags.find((tag) => tag.startsWith("MINT:"));
+      console.log("Tags:", tags); // Log all tags
+      console.log("Mint Tag:", mintTag); // Log the mint tag
+      if (mintTag) {
+        var mintType = mintTag.split(":")[1].trim();
+        console.log("Mint Type:", mintType); // Log the mint type
+        appendMintButton(mintType);
+      }
+    }
+
+    function appendMintButton(mintType) {
+      var mintButton = document.createElement("button");
+      mintButton.innerText = "Mint NFT";
+      mintButton.addEventListener("click", function () {
+        if (mintType === "good") {
+          mintGoodNFT();
+        } else if (mintType === "bad") {
+          mintBadNFT();
+        }
+      });
+      storyContainer.appendChild(mintButton);
+    }
+
+    // Minting functions
+    async function mintGoodNFT() {
+      console.log("Good ending");
+    }
+
+    async function mintBadNFT() {
+      const contractAddress = "0xB81cA5a50F2c234829d8194b90D8F71fEb74bA96";
+      const abi = [
+        // The ABI of your contract
+        {
+          constant: false,
+          inputs: [
+            {
+              name: "minter",
+              type: "address",
+            },
+            {
+              name: "tokenId",
+              type: "uint256",
+            },
+            {
+              name: "quantity",
+              type: "uint256",
+            },
+            {
+              name: "minterArguments",
+              type: "bytes",
+            },
+          ],
+          name: "mint",
+          outputs: [],
+          payable: true,
+          stateMutability: "payable",
+          type: "function",
+        },
+      ];
+      try {
+        const accounts = await web3.eth.getAccounts();
+        const myContract = new web3.eth.Contract(abi, contractAddress);
+        const tokenId = 1; // Replace with the tokenId you want to mint
+        const quantity = 1; // Replace with the quantity you want to mint
+        const minterArguments = web3.utils.asciiToHex(""); // Replace with any arguments required by the minter
+
+        await myContract.methods
+          .mint(accounts[0], tokenId, quantity, minterArguments)
+          .send({
+            from: accounts[0],
+            value: web3.utils.toWei("0.000777", "ether"),
+          }); // Replace '0.1' with the amount of ether you want to send
+        console.log("NFT minted successfully");
+      } catch (error) {
+        console.error("An error occurred while minting the NFT:", error);
+      }
     }
 
     // Create HTML choices from ink choices
@@ -314,7 +391,9 @@
     }
 
     // Check whether the OS/browser is configured for dark mode
-    var browserDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var browserDark = window.matchMedia(
+      "(prefers-color-scheme: light)"
+    ).matches;
 
     if (
       savedTheme === "dark" ||
