@@ -1,14 +1,21 @@
 # CLEAR
-A SHORT A.L.I.C.E # CLASS: h1
-# AUTHOR: metaend.eth
+A short by AliceGame.xyz & f/metaend.eth
 
-+ "Play the Game!"
++ "Continue"
+    -> title
+
+=== title ===
+# CLEAR
+# BACKGROUND: assets/images/alicetitle.webp
+# AUDIOLOOP: assets/music/scene1.mp3
+
++ "Continue"
     -> scene_1
 
 === scene_1 ===
 # CLEAR
-A gloomy classroom, under a flickering fluorescent light, reveals rows of identical desks. The walls are adorned with posters promoting conformity and obedience. Alice sits at a desk, her eyes darting around nervously as the teacher drones on about the virtues of fitting in. Her clenched fists betray her rising anxiety.
 # BACKGROUND: assets/images/scene1.png
+A gloomy classroom, under a flickering fluorescent light, reveals rows of identical desks. The walls are adorned with posters promoting conformity and obedience. Alice sits at a desk, her eyes darting around nervously as the teacher drones on about the virtues of fitting in. Her clenched fists betray her rising anxiety.
 
 + "Stand up and question the teacher."
     "But isn't individuality important too?" Alice's voice trembles slightly as she stands up, drawing the gaze of her classmates.

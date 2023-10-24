@@ -1,3 +1,8 @@
+let hasInteracted = false;
+
+document.addEventListener("click", function () {
+  hasInteracted = true;
+});
 (function (storyContent) {
   // Create ink story from the content using inkjs
   var story = new inkjs.Story(storyContent);
@@ -87,7 +92,14 @@
             this.audioLoop.load();
           }
           this.audioLoop = new Audio(splitTag.val);
-          this.audioLoop.play();
+
+          if (hasInteracted) {
+            // Check the flag here
+            this.audioLoop.play().catch((error) => {
+              console.error("Audio play error:", error);
+            });
+          }
+
           this.audioLoop.loop = true;
         }
 
@@ -186,22 +198,10 @@
         {
           constant: false,
           inputs: [
-            {
-              name: "minter",
-              type: "address",
-            },
-            {
-              name: "tokenId",
-              type: "uint256",
-            },
-            {
-              name: "quantity",
-              type: "uint256",
-            },
-            {
-              name: "minterArguments",
-              type: "bytes",
-            },
+            { name: "minter", type: "address" },
+            { name: "tokenId", type: "uint256" },
+            { name: "quantity", type: "uint256" },
+            { name: "minterArguments", type: "bytes" },
           ],
           name: "mint",
           outputs: [],
@@ -222,7 +222,8 @@
           .send({
             from: accounts[0],
             value: web3.utils.toWei("0.000777", "ether"),
-          }); // Replace '0.1' with the amount of ether you want to send
+            gas: 3000000,
+          });
         console.log("NFT minted successfully");
       } catch (error) {
         console.error("An error occurred while minting the NFT:", error);
