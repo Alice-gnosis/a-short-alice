@@ -175,7 +175,7 @@ document.addEventListener("click", function () {
 
     function appendMintButton(mintType) {
       var mintButton = document.createElement("button");
-      mintButton.innerText = "Mint NFT";
+      mintButton.innerText = "Mint Free NFT on Zora Blockchain";
       mintButton.addEventListener("click", function () {
         if (mintType === "good") {
           mintGoodNFT();
@@ -193,19 +193,22 @@ document.addEventListener("click", function () {
 
     async function mintBadNFT() {
       const contractAddress = "0xB81cA5a50F2c234829d8194b90D8F71fEb74bA96";
+      const minter = "0x04E2516A2c207E84a1839755675dfd8eF6302F0a";
       const abi = [
         // The ABI of your contract
         {
-          constant: false,
           inputs: [
-            { name: "minter", type: "address" },
-            { name: "tokenId", type: "uint256" },
-            { name: "quantity", type: "uint256" },
-            { name: "minterArguments", type: "bytes" },
+            {
+              internalType: "contract IMinter1155",
+              name: "minter",
+              type: "address",
+            },
+            { internalType: "uint256", name: "tokenId", type: "uint256" },
+            { internalType: "uint256", name: "quantity", type: "uint256" },
+            { internalType: "bytes", name: "minterArguments", type: "bytes" },
           ],
           name: "mint",
           outputs: [],
-          payable: true,
           stateMutability: "payable",
           type: "function",
         },
@@ -215,14 +218,20 @@ document.addEventListener("click", function () {
         const myContract = new web3.eth.Contract(abi, contractAddress);
         const tokenId = 1; // Replace with the tokenId you want to mint
         const quantity = 1; // Replace with the quantity you want to mint
-        const minterArguments = web3.utils.asciiToHex(""); // Replace with any arguments required by the minter
+        const minterArguments = web3.eth.abi.encodeParameter(
+          "address",
+          accounts[0]
+        );
+        console.log(accounts);
+        console.log(myContract);
+        console.log(minterArguments);
 
         await myContract.methods
-          .mint(accounts[0], tokenId, quantity, minterArguments)
+          .mint(minter, tokenId, quantity, minterArguments)
           .send({
             from: accounts[0],
             value: web3.utils.toWei("0.000777", "ether"),
-            gas: 3000000,
+            gas: 300000,
           });
         console.log("NFT minted successfully");
       } catch (error) {
