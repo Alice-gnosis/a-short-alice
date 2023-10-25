@@ -175,68 +175,30 @@ document.addEventListener("click", function () {
 
     function appendMintButton(mintType) {
       var mintButton = document.createElement("button");
-      mintButton.innerText = "Mint Free NFT on Zora Blockchain";
+      mintButton.innerText =
+        mintType === "good"
+          ? "Mint this Ending NFT for Free on Zora Blockchain"
+          : "Mint this Ending NFT for Free Zora Blockchain";
       mintButton.addEventListener("click", function () {
-        if (mintType === "good") {
-          mintGoodNFT();
-        } else if (mintType === "bad") {
-          mintBadNFT();
-        }
+        var htmlContent =
+          mintType === "good"
+            ? `
+              <div style="position:relative;width:100%;padding-top:calc(100% + 72px)">
+                  <iframe src="https://zora.co/collect/zora:0x7c0e8f5902236142bc92ec9b9538ef6d38f7b6e8/1/embed?referrer=0xaC1C4Bed1c7C71Fd3aFDe11e2bd4F18D969C843d" style="border:0;background-color:transparent;position:absolute;inset:0" width="100%" height="100%"></iframe>
+              </div>
+              <a href="https://zora.co/collect/zora:0x7c0e8f5902236142bc92ec9b9538ef6d38f7b6e8/1" style="padding:12px;text-decoration:none;color:#b3b3b3;font-family:'Inter',system-ui;font-size:10px;line-height:12px;font-style:normal;font-weight:400">ALICE on Zora</a>
+          `
+            : `
+              <div style="position:relative;width:100%;padding-top:calc(100% + 72px)">
+                  <iframe src="https://zora.co/collect/zora:0x7c0e8f5902236142bc92ec9b9538ef6d38f7b6e8/2/embed?referrer=0xaC1C4Bed1c7C71Fd3aFDe11e2bd4F18D969C843d" style="border:0;background-color:transparent;position:absolute;inset:0" width="100%" height="100%"></iframe>
+              </div>
+              <a href="https://zora.co/collect/zora:0x7c0e8f5902236142bc92ec9b9538ef6d38f7b6e8/2" style="padding:12px;text-decoration:none;color:#b3b3b3;font-family:'Inter',system-ui;font-size:10px;line-height:12px;font-style:normal;font-weight:400">LACIE on Zora</a>
+          `;
+        var displayDiv = document.createElement("div");
+        displayDiv.innerHTML = htmlContent;
+        storyContainer.appendChild(displayDiv);
       });
       storyContainer.appendChild(mintButton);
-    }
-
-    // Minting functions
-    async function mintGoodNFT() {
-      console.log("Good ending");
-    }
-
-    async function mintBadNFT() {
-      const contractAddress = "0xB81cA5a50F2c234829d8194b90D8F71fEb74bA96";
-      const minter = "0x04E2516A2c207E84a1839755675dfd8eF6302F0a";
-      const abi = [
-        // The ABI of your contract
-        {
-          inputs: [
-            {
-              internalType: "contract IMinter1155",
-              name: "minter",
-              type: "address",
-            },
-            { internalType: "uint256", name: "tokenId", type: "uint256" },
-            { internalType: "uint256", name: "quantity", type: "uint256" },
-            { internalType: "bytes", name: "minterArguments", type: "bytes" },
-          ],
-          name: "mint",
-          outputs: [],
-          stateMutability: "payable",
-          type: "function",
-        },
-      ];
-      try {
-        const accounts = await web3.eth.getAccounts();
-        const myContract = new web3.eth.Contract(abi, contractAddress);
-        const tokenId = 1; // Replace with the tokenId you want to mint
-        const quantity = 1; // Replace with the quantity you want to mint
-        const minterArguments = web3.eth.abi.encodeParameter(
-          "address",
-          accounts[0]
-        );
-        console.log(accounts);
-        console.log(myContract);
-        console.log(minterArguments);
-
-        await myContract.methods
-          .mint(minter, tokenId, quantity, minterArguments)
-          .send({
-            from: accounts[0],
-            value: web3.utils.toWei("0.000777", "ether"),
-            gas: 300000,
-          });
-        console.log("NFT minted successfully");
-      } catch (error) {
-        console.error("An error occurred while minting the NFT:", error);
-      }
     }
 
     // Create HTML choices from ink choices

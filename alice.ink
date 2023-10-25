@@ -1,4 +1,3 @@
-# CLEAR
 A short by AliceGame.xyz & f/metaend.eth
 
 + ► Continue 

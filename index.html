@@ -18,7 +18,7 @@
       </h3>
 
       <div id="controls" class="buttons">
-        <a id="rewind" title="Restart story from beginning">restart</a>
+        <a id="restart" title="Restart story from beginning">restart</a>
         <a id="save" title="Save progress">save</a>
         <a id="reload" title="Reload from save point">load</a>
         <a id="loginButton" title="Login with MetaMask" onclick="login()"
@@ -38,5 +38,13 @@
     <script src="alice.js"></script>
     <script src="main.js"></script>
     <script src="mm.js"></script>
+    <script type="text/javascript">
+      document
+        .getElementById("restart")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          location.reload();
+        });
+    </script>
   </body>
 </html>
